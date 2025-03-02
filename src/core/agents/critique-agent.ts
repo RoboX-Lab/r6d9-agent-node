@@ -100,6 +100,36 @@ export class CritiqueAgent {
       };
     }
   }
+
+  /**
+   * Direct invocation of the critique agent - alias for evaluate
+   * @param objective - The overall objective
+   * @param currentStep - The current step being evaluated
+   * @param pageContent - The page content after the step execution
+   * @returns Evaluation result
+   */
+  async invoke(
+    objective: string,
+    currentStep: string,
+    pageContent: string,
+  ): Promise<CritiqueResult> {
+    return this.evaluate(objective, currentStep, pageContent);
+  }
+
+  /**
+   * Run method for compatibility with the agent interface
+   * @param objective - The overall objective
+   * @param currentStep - The current step being evaluated
+   * @param pageContent - The page content after the step execution
+   * @returns Evaluation result
+   */
+  async run(
+    objective: string,
+    currentStep: string,
+    pageContent: string,
+  ): Promise<CritiqueResult> {
+    return this.evaluate(objective, currentStep, pageContent);
+  }
 }
 
 /**

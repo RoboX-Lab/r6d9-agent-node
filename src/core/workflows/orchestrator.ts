@@ -53,22 +53,39 @@ export class Orchestrator {
         const currentStepIndex = state.currentStep || 0;
         const currentStep = state.steps?.[currentStepIndex];
         
+        logger.info('Execution phase', { step: currentStep, index: currentStepIndex });
+        
         if (!currentStep) {
-          logger.warn('No step to execute', { currentStepIndex });
-          return { ...state, success: false };
+          logger.error('No step found at index', { index: currentStepIndex });
+          return {
+            ...state,
+            success: false,
+            history: state.history.concat(`Error: No step found at index ${currentStepIndex}`),
+          };
         }
         
-        logger.info('Executing step', { step: currentStep, index: currentStepIndex });
-        
-        await this.browserAgent.initialize();
-        const pageContent = await this.browserAgent.navigate(currentStep);
-        await this.browserAgent.close();
-        
-        return { 
-          ...state, 
-          pageContent,
-          history: [...(state.history || []), pageContent],
-        };
+        try {
+          // Execute the current step using the browser agent
+          const pageContent = await this.browserAgent.navigate(currentStep);
+          
+          logger.debug('Step execution complete', { 
+            step: currentStep, 
+            contentLength: pageContent.length 
+          });
+          
+          return {
+            ...state,
+            pageContent,
+            history: state.history.concat(`Executed: ${currentStep}`),
+          };
+        } catch (error) {
+          logger.error('Step execution failed', error);
+          return {
+            ...state,
+            success: false,
+            history: state.history.concat(`Failed: ${currentStep} - ${(error as Error).message}`),
+          };
+        }
       },
     );
     
@@ -81,22 +98,30 @@ export class Orchestrator {
         const currentStepIndex = state.currentStep || 0;
         const currentStep = state.steps?.[currentStepIndex];
         
+        logger.info('Evaluation phase', { step: currentStep });
+        
         if (!currentStep) {
-          logger.warn('No step to evaluate', { currentStepIndex });
-          return { ...state, success: false };
+          return {
+            ...state,
+            success: false,
+          };
         }
         
-        logger.info('Evaluating step', { step: currentStep, index: currentStepIndex });
-        
-        const { success, reason } = await this.critiqueAgent.evaluate(
-          state.objective || '',
+        const evaluation = await this.critiqueAgent.evaluate(
+          state.objective,
           currentStep,
-          state.pageContent || '',
+          state.pageContent,
         );
         
-        logger.debug('Evaluation result', { success, reason });
+        logger.debug('Step evaluation', { success: evaluation.success, reason: evaluation.reason });
         
-        return { ...state, success };
+        return {
+          ...state,
+          success: evaluation.success,
+          history: state.history.concat(
+            `Evaluation: ${evaluation.success ? 'Success' : 'Failed'} - ${evaluation.reason}`
+          ),
+        };
       },
     );
     
@@ -109,34 +134,22 @@ export class Orchestrator {
         const currentStepIndex = state.currentStep || 0;
         const success = state.success || false;
         
-        if (!success) {
-          logger.warn('Step failed, retrying with modified approach', { 
-            step: state.steps?.[currentStepIndex], 
-            index: currentStepIndex 
-          });
-          
-          // In a real implementation, we could modify the approach here
-          // For now, we'll just try again with the same step
-          return { ...state };
+        logger.info('Decision phase', { success, currentStep: currentStepIndex });
+        
+        if (success && state.steps && currentStepIndex < state.steps.length - 1) {
+          // Move to the next step
+          return {
+            ...state,
+            currentStep: currentStepIndex + 1,
+          };
         }
         
-        // Move to the next step if available
-        if (state.steps && currentStepIndex < state.steps.length - 1) {
-          logger.info('Moving to next step', { nextIndex: currentStepIndex + 1 });
-          return { ...state, currentStep: currentStepIndex + 1 };
-        }
-        
-        // All steps completed successfully
-        logger.info('All steps completed successfully');
-        return { 
-          ...state, 
-          response: 'All steps completed successfully.' 
-        };
+        // Either we've completed all steps or the current step failed
+        return state;
       },
     );
     
-    // Define workflow edges
-    // @ts-ignore - LangGraph types can be challenging to align perfectly
+    // Add edges between nodes
     this.workflow
       .addEdge(START as any, 'plan' as any)
       .addEdge('plan' as any, 'execute' as any)
@@ -181,14 +194,14 @@ export class Orchestrator {
         currentUrl: '',
         currentStep: 0,
         success: false,
-      });
+      } as typeof PlanExecuteState.State);
       
       logger.info('Workflow completed', { 
         success: result.success,
         stepsExecuted: result.steps?.length
       });
       
-      return result;
+      return result as typeof PlanExecuteState.State;
     } catch (error) {
       logger.error('Workflow execution failed', error);
       throw new Error(`Workflow execution failed: ${(error as Error).message}`);
