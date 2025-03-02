@@ -148,10 +148,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](./docs/CONTRIBUTING.md) 
 - [Twitter](https://x.com/Roboagent69)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/r6d9-agent-node)
 
-Weekly office hours: Every Thursday at 3PM UTC on Discord.
-
 ## License
 
 MIT License - see the [LICENSE](./LICENSE) file for details.
 
-<!-- ## Related Projects -->
