@@ -161,11 +161,11 @@ npm run format
 
 Contributions are welcome! Please see [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for details.
 
-## Community and Support
+<!-- ## Community and Support -->
 
-- [GitHub Discussions](https://github.com/RoboX-Lab/r6d9-agent-node/discussions)
-- [Discord](https://r6d9.com/discord)
-- [Twitter](https://x.com/Roboagent69)
+<!-- - [GitHub Discussions](https://github.com/RoboX-Lab/r6d9-agent-node/discussions) -->
+<!-- - [Discord](https://r6d9.com/discord)
+- [Twitter](https://x.com/Roboagent69) -->
 <!-- - [Stack Overflow](https://stackoverflow.com/questions/tagged/r6d9-agent-node) -->
 
 ## License
