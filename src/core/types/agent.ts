@@ -27,19 +27,19 @@ export const PlanExecuteState = Annotation.Root({
   objective: Annotation<string>({
     reducer: (x, y) => y ?? x ?? '',
   }),
-  /** Current browser URL */
-  currentUrl: Annotation<string>({
+  /** Current screen state */
+  screenState: Annotation<string>({
     reducer: (x, y) => y ?? x ?? '',
   }),
-  /** Current page content */
-  pageContent: Annotation<string>({
+  /** Current system status */
+  systemStatus: Annotation<string>({
     reducer: (x, y) => y ?? x ?? '',
   }),
   /** Current step number in the execution plan */
   currentStep: Annotation<number>({
     reducer: (x, y) => y ?? x ?? 0,
   }),
-  /** History of visited pages and actions */
+  /** History of actions and system states */
   history: Annotation<string[]>({
     reducer: (x, y) => x.concat(y),
   }),

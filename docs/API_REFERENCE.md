@@ -5,9 +5,13 @@ This document provides a comprehensive reference for the main classes and method
 ## Table of Contents
 
 - [Core Agents](#core-agents)
-  - [BrowserAgent](#browseragent)
+  - [ComputerAgent](#computeragent)
   - [PlannerAgent](#planneragent)
   - [CritiqueAgent](#critiqueagent)
+- [Services](#services)
+  - [ComputerService](#computerservice)
+- [Tools](#tools)
+  - [Computer Interaction Tools](#computer-interaction-tools)
 - [Workflows](#workflows)
   - [Orchestrator](#orchestrator)
 - [Utilities](#utilities)
@@ -21,12 +25,12 @@ This document provides a comprehensive reference for the main classes and method
 
 ## Core Agents
 
-### BrowserAgent
+### ComputerAgent
 
-The `BrowserAgent` handles browser automation using Playwright.
+The `ComputerAgent` handles general computer automation using screenshot analysis and natural mouse/keyboard interactions.
 
 ```typescript
-import { BrowserAgent } from 'r6d9-agent-node';
+import { ComputerAgent } from 'r6d9-agent-node';
 ```
 
 #### Constructor
@@ -41,33 +45,23 @@ constructor(config: TAgentConfig = {})
 
 #### Methods
 
-##### navigate
+##### interact
 
-Navigates to complete a specific task in the browser.
+Interacts with the computer to complete a specific task using screenshot analysis and mouse/keyboard controls.
 
 ```typescript
-async navigate(task: string): Promise<string>
+async interact(task: string): Promise<string>
 ```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| task | string | The task to execute in the browser |
+| task | string | The task to execute on the computer |
 
-**Returns**: Promise resolving to a string containing the page content after navigation.
-
-##### close
-
-Closes the browser.
-
-```typescript
-async close(): Promise<void>
-```
-
-**Returns**: Promise that resolves when the browser is closed.
+**Returns**: Promise resolving to a string containing the result of the interaction.
 
 ##### run
 
-Runs the browser agent with control functions.
+Runs the computer agent with control functions.
 
 ```typescript
 run(task?: string): { start: Function, stop: Function, pause: Function, resume: Function }
@@ -101,61 +95,47 @@ constructor(config: TAgentConfig = {})
 
 ##### generatePlan
 
-Generates a plan based on an objective.
+Generates a step-by-step plan for completing an objective.
 
 ```typescript
 async generatePlan(
-  objective: string,
-  originalPlan: string = '',
-  feedback: string = ''
+  objective: string, 
+  originalPlan?: string, 
+  feedback?: string
 ): Promise<string[]>
 ```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | objective | string | The objective to plan for |
-| originalPlan | string | Optional original plan for refinement |
-| feedback | string | Optional feedback on previous plan |
+| originalPlan | string | Optional original plan to revise |
+| feedback | string | Optional feedback to improve the plan |
 
-**Returns**: Promise resolving to an array of strings representing steps in the plan.
+**Returns**: Promise resolving to an array of step strings.
 
-##### invoke
+##### revise
 
-Direct invocation of the planner.
+Revises an existing plan based on feedback.
 
 ```typescript
-async invoke(
-  objective: string,
-  originalPlan: string = '',
-  feedback: string = ''
-): Promise<Plan>
+async revise(
+  objective: string, 
+  originalPlan: string, 
+  feedback: string
+): Promise<string[]>
 ```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| objective | string | The objective to plan for |
-| originalPlan | string | Optional original plan for refinement |
-| feedback | string | Optional feedback on previous plan |
+| objective | string | The objective being planned for |
+| originalPlan | string | The original plan to revise |
+| feedback | string | Feedback to incorporate into the revised plan |
 
-**Returns**: Promise resolving to a `Plan` object containing the plan and next step.
-
-##### run
-
-Run method for compatibility with the agent interface.
-
-```typescript
-async run(
-  objective: string,
-  originalPlan: string = '',
-  feedback: string = ''
-): Promise<Plan>
-```
-
-**Returns**: Promise resolving to a `Plan` object (same as `invoke`).
+**Returns**: Promise resolving to an array of revised step strings.
 
 ### CritiqueAgent
 
-The `CritiqueAgent` evaluates the success of task execution.
+The `CritiqueAgent` evaluates the results of executed steps.
 
 ```typescript
 import { CritiqueAgent } from 'r6d9-agent-node';
@@ -175,51 +155,136 @@ constructor(config: TAgentConfig = {})
 
 ##### evaluate
 
-Evaluates the success of a task step.
+Evaluates the result of a step execution against the objective.
 
 ```typescript
 async evaluate(
-  objective: string,
-  currentStep: string,
-  pageContent: string
+  objective: string, 
+  step: string, 
+  result: string
 ): Promise<CritiqueResult>
 ```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | objective | string | The overall objective |
-| currentStep | string | The current step being evaluated |
-| pageContent | string | The page content after step execution |
+| step | string | The step that was executed |
+| result | string | The result of the step execution |
 
 **Returns**: Promise resolving to a `CritiqueResult` object.
 
-##### invoke
+## Services
 
-Direct invocation of the critique agent (alias for evaluate).
+### ComputerService
+
+The `ComputerService` provides low-level functions for interacting with the computer.
 
 ```typescript
-async invoke(
-  objective: string,
-  currentStep: string,
-  pageContent: string
-): Promise<CritiqueResult>
+import { ComputerService } from 'r6d9-agent-node';
 ```
 
-**Returns**: Promise resolving to a `CritiqueResult` object.
-
-##### run
-
-Run method for compatibility with the agent interface.
+#### Constructor
 
 ```typescript
-async run(
-  objective: string,
-  currentStep: string,
-  pageContent: string
-): Promise<CritiqueResult>
+constructor(config: TComputerServiceConfig = {})
 ```
 
-**Returns**: Promise resolving to a `CritiqueResult` object.
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| config | TComputerServiceConfig | Optional configuration for the service |
+
+#### Methods
+
+##### takeScreenshot
+
+Takes a screenshot of the current screen.
+
+```typescript
+async takeScreenshot(options?: TScreenshotOptions): Promise<string>
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| options | TScreenshotOptions | Optional screenshot configuration |
+
+**Returns**: Promise resolving to the path of the saved screenshot.
+
+##### mouseMove
+
+Moves the mouse to the specified coordinates.
+
+```typescript
+async mouseMove(x: number, y: number): Promise<void>
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| x | number | X coordinate |
+| y | number | Y coordinate |
+
+##### mouseClick
+
+Clicks at the current mouse position or at specified coordinates.
+
+```typescript
+async mouseClick(options?: TMouseClickOptions): Promise<void>
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| options | TMouseClickOptions | Optional click configuration |
+
+##### typeText
+
+Types the specified text.
+
+```typescript
+async typeText(text: string, delay?: number): Promise<void>
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| text | string | Text to type |
+| delay | number | Optional delay between keystrokes in ms |
+
+##### pressKey
+
+Presses a specific keyboard key.
+
+```typescript
+async pressKey(key: string): Promise<void>
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| key | string | Key to press |
+
+##### executeCommand
+
+Executes a terminal command.
+
+```typescript
+async executeCommand(command: string): Promise<{ stdout: string, stderr: string }>
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| command | string | Command to execute |
+
+**Returns**: Promise resolving to an object with stdout and stderr strings.
+
+## Tools
+
+### Computer Interaction Tools
+
+Core tools for computer interaction via screenshot analysis and natural mouse/keyboard controls:
+
+- `takeScreenshotTool`: Captures the current screen
+- `analyzeScreenTool`: Analyzes screen content using vision models
+- `mouseMoveClickTool`: Moves and clicks the mouse at specified coordinates
+- `typeTextTool`: Types text into the focused input
+- `pressKeyTool`: Presses specified keyboard keys
+- `executeCommandTool`: Runs terminal commands
 
 ## Workflows
 
@@ -234,32 +299,49 @@ import { Orchestrator } from 'r6d9-agent-node';
 #### Constructor
 
 ```typescript
-constructor()
+constructor({
+  plannerAgent,
+  executionAgent,
+  critiqueAgent
+}: {
+  plannerAgent: PlannerAgent,
+  executionAgent: ComputerAgent,
+  critiqueAgent: CritiqueAgent
+})
 ```
 
-Creates a new Orchestrator instance with default agent configurations.
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| plannerAgent | PlannerAgent | Agent for generating plans |
+| executionAgent | ComputerAgent | Agent for executing steps |
+| critiqueAgent | CritiqueAgent | Agent for evaluating results |
 
 #### Methods
 
 ##### run
 
-Runs the orchestrator with a specific objective.
+Runs a workflow for a given objective.
 
 ```typescript
-async run(objective: string): Promise<typeof PlanExecuteState.State>
+run(objective: string): { 
+  start: Function, 
+  stop: Function, 
+  pause: Function, 
+  resume: Function 
+}
 ```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | objective | string | The objective to accomplish |
 
-**Returns**: Promise resolving to the final state of the workflow execution.
+**Returns**: Control functions for the workflow.
 
 ## Utilities
 
 ### Logger
 
-The `logger` provides structured logging capabilities.
+The `Logger` utility provides standardized logging across the framework.
 
 ```typescript
 import { logger } from 'r6d9-agent-node';
@@ -267,98 +349,87 @@ import { logger } from 'r6d9-agent-node';
 
 #### Methods
 
-```typescript
-logger.debug(message: string, context?: object): void
-logger.info(message: string, context?: object): void
-logger.warn(message: string, context?: object): void
-logger.error(message: string, error?: Error | object): void
-```
+- `debug(message: string, context?: any)`: Logs debug information
+- `info(message: string, context?: any)`: Logs informational messages
+- `warn(message: string, context?: any)`: Logs warnings
+- `error(message: string, error?: Error, context?: any)`: Logs errors
 
 ### Config
 
-The `createLLM` function creates a configured LLM instance.
+The `Config` utility manages configuration settings.
 
 ```typescript
-import { createLLM } from 'r6d9-agent-node';
+import { config } from 'r6d9-agent-node';
 ```
 
-```typescript
-function createLLM(config: TAgentConfig = {}): ChatOpenAI
-```
+#### Methods
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| config | TAgentConfig | Configuration for the LLM |
-
-**Returns**: A configured `ChatOpenAI` instance.
+- `get(key: string, defaultValue?: any)`: Gets a configuration value
+- `set(key: string, value: any)`: Sets a configuration value
+- `load(path?: string)`: Loads configuration from a file
 
 ## Types
 
 ### TAgentConfig
 
-Configuration interface for agents.
+Configuration options for agents.
 
 ```typescript
 type TAgentConfig = {
-  /** LLM model name to use */
-  modelName?: string;
-  /** Temperature for generation (0-1) */
+  /** Model name to use */
+  model?: string;
+  /** Temperature for generation (0.0-2.0) */
   temperature?: number;
   /** Maximum tokens to generate */
   maxTokens?: number;
   /** Maximum retries on failure */
   maxRetries?: number;
+  /** Retry delay in milliseconds */
+  retryDelay?: number;
 };
 ```
 
 ### PlanExecuteState
 
-State object used by the Orchestrator workflow.
+State object for plan-execute workflows.
 
 ```typescript
-const PlanExecuteState = Annotation.Root({
-  /** User's objective/task to accomplish */
-  objective: Annotation<string>(),
-  /** Current browser URL */
-  currentUrl: Annotation<string>(),
-  /** Current page content */
-  pageContent: Annotation<string>(),
-  /** Current step number in the execution plan */
-  currentStep: Annotation<number>(),
-  /** History of visited pages and actions */
-  history: Annotation<string[]>(),
-  /** Agent's response to the user */
-  response: Annotation<string>(),
-  /** Generated execution plan steps */
-  steps: Annotation<string[]>(),
-  /** Success status of the current step */
-  success: Annotation<boolean>(),
-});
+type PlanExecuteState = {
+  /** The objective to accomplish */
+  objective: string;
+  /** The plan steps */
+  plan: string[];
+  /** Current step index */
+  current_step_idx: number;
+  /** Current step content */
+  current_step: string;
+  /** Result of current step execution */
+  step_result: string;
+  /** Feedback from critique */
+  critique: string;
+  /** Whether the step was successful */
+  step_success: boolean;
+  /** Overall workflow success */
+  success: boolean;
+  /** Final response */
+  response: string;
+  /** Execution history */
+  history: string[];
+};
 ```
 
 ### CritiqueResult
 
-Type for critique evaluation results.
+Result of step critique.
 
 ```typescript
 type CritiqueResult = {
   /** Whether the step was successful */
   success: boolean;
-  /** Reason for the success/failure */
+  /** Reason for success/failure */
   reason: string;
-  /** Suggestions for improvement if failed */
-  suggestions?: string[];
-};
-```
-
-### Plan
-
-Type for the plan generated by the planner agent.
-
-```typescript
-type Plan = {
-  /** Complete step-by-step plan */
-  plan: string[];
+  /** Suggestions for improvement */
+  suggestions: string[];
   /** Next action to execute */
   next_step: string;
 };

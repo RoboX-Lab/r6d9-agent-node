@@ -1,7 +1,7 @@
 {
   "name": "r6d9-agent-node",
   "version": "0.1.0",
-  "description": "A powerful Node.js library for browser automation and control powered by LLMs",
+  "description": "A powerful Node.js library for computer automation and control through screenshot analysis and natural interactions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,20 +15,21 @@
     "test:unit": "jest --testMatch '**/tests/**/*.unit.test.ts'",
     "test:integration": "jest --testMatch '**/tests/**/*.integration.test.ts'",
     "test:e2e": "jest --testMatch '**/tests/**/*.e2e.test.ts'",
-    "example": "ts-node examples/basic-search-example.ts",
+    "example": "ts-node examples/basic-computer-interaction-example.ts",
     "docs:generate": "typedoc --options typedoc.json",
     "prepublishOnly": "npm run build && npm run test"
   },
   "keywords": [
-    "browser",
+    "computer",
     "automation",
     "llm",
     "ai",
     "langchain",
-    "playwright",
-    "browser-automation",
-    "dom-manipulation",
-    "agent"
+    "screenshot",
+    "vision",
+    "computer-control",
+    "agent",
+    "mouse-keyboard"
   ],
   "author": "R6D9 Team",
   "license": "MIT",
@@ -42,7 +43,6 @@
   "homepage": "https://github.com/RoboX-Lab/r6d9-agent-node#readme",
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@playwright/test": "^1.50.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.1",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
@@ -59,17 +59,16 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.10.1",
     "@langchain/community": "^0.3.30",
     "@langchain/core": "^0.3.40",
     "@langchain/langgraph": "^0.2.46",
     "@langchain/openai": "^0.4.4",
-    "@solana/web3.js": "^1.87.3",
     "axios": "^1.7.9",
     "consola": "^3.4.0",
     "dotenv": "^16.4.7",
     "openai": "^4.85.1",
-    "playwright": "^1.50.1"
+    "robotjs": "^0.6.0",
+    "zod": "^3.24.2"
   },
   "engines": {
     "node": ">=20.0.0"

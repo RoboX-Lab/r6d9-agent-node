@@ -1,263 +1,201 @@
-# R6D9 Agent Node Architecture
+# R6D9 Agent Node: Architecture
 
-This document provides a comprehensive overview of the R6D9 Agent Node architecture, explaining the core components, their interactions, and the design principles that guide the system.
+This document describes the architecture of the R6D9 Agent Node framework, explaining the key components and their interactions.
 
-## Overview
+## System Architecture Overview
 
-R6D9 Agent Node is a TypeScript framework for building and orchestrating AI agent workflows that interact with web browsers. It leverages language models and browser automation to create flexible, composable agents capable of complex task execution.
+R6D9 Agent Node is built on a component-based architecture focused on computer interaction via screenshot analysis. The framework uses AI-powered agents to analyze visuals, control mouse and keyboard inputs, and execute terminal commands to accomplish tasks.
 
-## System Architecture
+```
+┌─────────────────────────────────────────┐
+│             Orchestrator                 │
+│  ┌─────────┐  ┌────────┐  ┌──────────┐  │
+│  │ Planner │  │Computer│  │ Critique │  │
+│  │  Agent  │──▶  Agent │──▶  Agent   │  │
+│  └─────────┘  └────────┘  └──────────┘  │
+└───────────────────│───────────────────┘
+                    │
+   ┌────────────────▼─────────────────┐
+   │        Computer Service           │
+   │                                   │
+   │  ┌────────┐  ┌────────────────┐  │
+   │  │Screenshot│ │Mouse/Keyboard  │  │
+   │  │Analysis │ │   Control      │  │
+   │  └────────┘  └────────────────┘  │
+   │                                   │
+   │  ┌────────────────────────────┐  │
+   │  │      Terminal Command      │  │
+   │  │        Execution           │  │
+   │  └────────────────────────────┘  │
+   └───────────────────────────────────┘
+```
 
-![Architecture Diagram](./assets/architecture.png)
+## Core Components
 
-*Note: The architecture diagram needs to be created. Please add an architecture.png file to the docs/assets directory to visualize the system architecture.*
+### 1. Agents
 
-### Key Components
+#### ComputerAgent
 
-1. **Core Agents**
-   - Specialized agents with focused capabilities
-   - Modular design for composability
-   - Standard interfaces for interoperability
+The `ComputerAgent` is the primary tool for interacting with the computer system. It uses screenshot analysis to understand the screen state and controls mouse/keyboard actions to interact with the system naturally.
 
-2. **Orchestration Layer**
-   - Workflow management with LangGraph
-   - State management and transitions
-   - Agent coordination and communication
+Key responsibilities:
+- Taking screenshots of the current screen
+- Analyzing the screenshots using vision models
+- Moving the mouse to target coordinates
+- Clicking, typing, and pressing keys
+- Executing terminal commands
+- Managing the interaction flow using LangGraph
 
-3. **Browser Interface**
-   - Playwright integration for browser automation
-   - Page content extraction and processing
-   - Action execution in browser context
+#### PlannerAgent
 
-4. **LLM Integration**
-   - OpenAI API connection management
-   - Prompt engineering and response handling
-   - Error handling and retry logic
+The `PlannerAgent` breaks down complex objectives into step-by-step plans that can be executed by the ComputerAgent.
 
-5. **Utilities & Support**
-   - Logging and monitoring
-   - Configuration management
-   - Type definitions and shared interfaces
+Key responsibilities:
+- Analyzing the objective
+- Creating detailed step-by-step plans
+- Refining plans based on feedback
+- Adapting plans when environment changes
 
-## Core Agents
+#### CritiqueAgent
 
-### BrowserAgent
+The `CritiqueAgent` evaluates the results of the ComputerAgent's actions and provides feedback for improvements.
 
-The BrowserAgent is responsible for browser automation and web interaction. It:
+Key responsibilities:
+- Analyzing execution results against the intended goal
+- Determining success or failure of steps
+- Providing detailed feedback for improvements
+- Suggesting corrective actions
 
-- Manages browser sessions with Playwright
-- Executes navigation and interaction commands
-- Extracts and processes page content
-- Provides a high-level API for web automation
+### 2. Services
 
-### PlannerAgent
+#### ComputerService
 
-The PlannerAgent generates step-by-step execution plans. It:
+The `ComputerService` provides low-level utilities for interacting with the computer.
 
-- Translates high-level objectives into concrete steps
-- Refines plans based on feedback
-- Provides structured planning output
-- Adapts plans to changing conditions
+Key functionalities:
+- Screenshot capture
+- Mouse movement and clicking
+- Keyboard input (typing and key presses)
+- Terminal command execution
+- Error handling and retries
 
-### CritiqueAgent
+### 3. Tools
 
-The CritiqueAgent evaluates the success of executed steps. It:
+Tools are atomic functions that implement specific capabilities for the agents to use:
 
-- Analyzes page content against objectives
-- Determines step success or failure
-- Provides actionable feedback
-- Suggests improvements for failed steps
+#### Screenshot and Analysis Tools
+- `takeScreenshotTool`: Captures the current screen state
+- `analyzeScreenTool`: Uses vision models to analyze the screen content
 
-## Workflow Orchestration
+#### Input Control Tools
+- `mouseMoveClickTool`: Controls mouse movement and clicking
+- `typeTextTool`: Types text into focused input fields
+- `pressKeyTool`: Sends keyboard key presses
 
-The system uses LangGraph for workflow orchestration:
+#### System Tools
+- `executeCommandTool`: Runs terminal commands
 
-1. **State Management**
-   - Typed state objects with annotations
-   - Clear state transitions
-   - History tracking
+### 4. Workflows
 
-2. **Execution Flow**
-   - Plan -> Execute -> Critique -> Adapt cycle
-   - Conditional branching based on critique results
-   - Error handling and recovery
+#### Orchestrator
 
-3. **Agent Coordination**
-   - Sequential agent execution
-   - State passing between agents
-   - Result aggregation
+The `Orchestrator` coordinates the agents in a workflow to accomplish complex tasks:
+
+1. Planning: Uses the PlannerAgent to create a step-by-step plan
+2. Execution: Uses the ComputerAgent to execute each step
+3. Critique: Uses the CritiqueAgent to evaluate results
+4. Refinement: Adjusts the plan based on feedback
+5. Iteration: Continues until the objective is met
+
+## Technical Architecture
+
+### LangGraph Integration
+
+R6D9 Agent Node uses LangGraph to implement complex workflows with state management. This enables:
+
+- Step-by-step execution
+- Conditional branching
+- Error handling and recovery
+- Pausing and resuming workflows
+
+### Vision Model Integration
+
+The framework integrates with vision-capable models (like GPT-4o) to analyze screenshots:
+
+- Screenshot capture is optimized for analysis
+- Prompts are designed to extract specific information
+- Feedback loops improve accuracy
+
+### Cross-Platform Support
+
+Computer interaction is designed to work across different operating systems:
+
+- Abstracted mouse/keyboard control
+- Platform-specific implementation
+- Consistent interfaces
 
 ## Data Flow
 
-The typical data flow in a R6D9 Agent Node workflow:
+1. **User Input**: The user provides an objective to the system
+2. **Planning**: The planner creates a step-by-step plan
+3. **Screen Analysis**: The computer agent takes a screenshot
+4. **Vision Processing**: The screenshot is analyzed
+5. **Interaction**: Mouse/keyboard/terminal actions are performed
+6. **Verification**: Another screenshot is taken to verify results
+7. **Critique**: Results are evaluated against the objective
+8. **Iteration**: The process repeats until completion
 
-1. User provides an objective
-2. PlannerAgent generates a step-by-step plan
-3. Orchestrator initializes the execution state
-4. For each step:
-   - BrowserAgent executes the step
-   - CritiqueAgent evaluates the result
-   - Orchestrator decides next action (continue, revise plan, etc.)
-5. Final results are returned to the user
+## Configuration System
 
-## Design Principles
+The framework uses a hierarchical configuration system that allows:
 
-### 1. Modularity
+- Environment-based configuration
+- Programmatic overrides
+- Per-agent configuration
+- Sensible defaults
 
-R6D9 Agent Node is designed with a strong emphasis on modularity:
+Key configuration parameters include:
+- Model selection
+- Screenshot directory
+- Viewport dimensions
+- Logging level
+- Execution parameters
 
-- Each agent has a single, focused responsibility
-- Agents can be used independently or composed
-- New agents can be added without modifying existing ones
+## Error Handling and Recovery
 
-### 2. Type Safety
+The framework implements robust error handling:
 
-The system leverages TypeScript's type system:
+- Agent-level retries
+- Workflow-level error recovery
+- State persistence
+- Comprehensive logging
 
-- Comprehensive type definitions
-- Interface-based design
-- Runtime type checking where necessary
-- Annotated state objects
+## Security Model
 
-### 3. Extensibility
+Security is a core consideration:
 
-The framework is designed to be easily extended:
+- Sandboxed terminal command execution
+- Allowlist/blocklist for commands
+- Token limits for API usage
+- Rate limiting for interaction actions
+- Controlled access to system resources
 
-- Plugin-like architecture for tools
-- Configurable agent behaviors
-- Customizable workflow definitions
-- Flexible integration points
+## Extensibility
 
-### 4. Robustness
+The architecture is designed for extensibility:
 
-The system prioritizes reliability:
-
-- Comprehensive error handling
-- Retry logic for external services
-- Graceful degradation
-- Detailed logging
-
-## Implementation Details
-
-### Agent Configuration
-
-Agents accept a common configuration interface:
-
-```typescript
-type TAgentConfig = {
-  modelName?: string;
-  temperature?: number;
-  maxTokens?: number;
-  maxRetries?: number;
-};
-```
-
-### Standard Agent Interface
-
-All agents implement a consistent interface:
-
-```typescript
-interface IAgent<TInput, TOutput> {
-  invoke(input: TInput): Promise<TOutput>;
-  run(input: TInput): Promise<TOutput>;
-}
-```
-
-### Workflow State
-
-The orchestrator manages a comprehensive state object:
-
-```typescript
-const PlanExecuteState = Annotation.Root({
-  objective: Annotation<string>(),
-  currentUrl: Annotation<string>(),
-  pageContent: Annotation<string>(),
-  currentStep: Annotation<number>(),
-  history: Annotation<string[]>(),
-  response: Annotation<string>(),
-  steps: Annotation<string[]>(),
-  success: Annotation<boolean>(),
-});
-```
-
-## Integration Patterns
-
-### Browser Integration
-
-The BrowserAgent uses Playwright to control browsers:
-
-- Cross-browser compatibility (Chromium, Firefox, WebKit)
-- Headless or headed mode
-- Configurable timeouts and behavior
-- Screenshot and DOM capture capabilities
-
-### LLM Integration
-
-The framework integrates with language models through LangChain:
-
-- Flexible model selection (GPT-4, etc.)
-- Structured prompt templates
-- Output parsing and validation
-- Token usage optimization
+- Custom agents can be created
+- New tools can be added
+- Workflows can be customized
+- Models can be swapped out
+- Services can be extended
 
 ## Performance Considerations
 
-The system addresses several performance aspects:
+The system is optimized for:
 
-1. **Parallelization**
-   - Concurrent execution where possible
-   - Asynchronous operations
-
-2. **Resource Management**
-   - Browser instance pooling
-   - Connection pooling for LLM requests
-   - Memory optimization
-
-3. **Caching**
-   - LLM response caching
-   - Page content caching
-   - Plan step caching
-
-## Security Considerations
-
-The framework implements several security features:
-
-1. **Isolation**
-   - Browser sandboxing
-   - Separate process execution
-
-2. **Authentication**
-   - API key management
-   - Secure credential handling
-
-3. **Data Handling**
-   - Minimized data transfer
-   - Optional content filtering
-
-## Future Architecture Directions
-
-Planned architectural improvements:
-
-1. **Agent Memory**
-   - Long-term knowledge storage
-   - Session persistence
-   - Cross-session learning
-
-2. **Multi-Agent Collaboration**
-   - Parallel agent execution
-   - Specialized agent teams
-   - Agent communication protocols
-
-3. **Enhanced Reasoning**
-   - Improved planning algorithms
-   - Self-debugging capabilities
-   - Goal decomposition strategies
-
-4. **Ecosystem Integration**
-   - API gateway capabilities
-   - Service discovery
-   - Event-driven architecture
-
-## Conclusion
-
-The R6D9 Agent Node architecture provides a flexible, extensible foundation for building AI agent systems that can interact with web interfaces. Its modular design, strong typing, and orchestration capabilities enable complex workflows while maintaining code quality and developer experience.
+- Minimal unnecessary screenshot captures
+- Efficient vision model token usage
+- Parallel processing where appropriate
+- Caching of analysis results
+- Reduced API calls

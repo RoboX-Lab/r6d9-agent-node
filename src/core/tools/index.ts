@@ -1,6 +1,6 @@
 /**
  * @file Tools index
- * @description Exports all available tools for browser automation
+ * @description Exports all available tools for computer automation
  */
 
 import { logger } from '../utils/logger';
@@ -8,17 +8,19 @@ import { ToolCategory, ToolSet } from '../types/tool';
 import { DynamicStructuredTool } from 'langchain/tools';
 import { z } from 'zod';
 
-// Import tools
-import { openUrlTool } from './browser/open-url-tool';
-import { getPageUrlTool } from './browser/get-url-tool';
-import { clickTool } from './browser/click-tool';
-import { enterTextTool } from './browser/enter-text-tool';
-import { getDomFieldsTool } from './browser/get-dom-fields-tool';
-import { googleSearchTool } from './search/search-tool';
-import { pressKeyCombinationTool } from './browser/press-key-combination-tool';
+// Import computer tools
+import { COMPUTER_TOOLS } from './computer';
+import { 
+  takeScreenshotTool, 
+  executeCommandTool, 
+  mouseMoveClickTool, 
+  typeTextTool, 
+  pressKeyTool, 
+  analyzeScreenTool 
+} from './computer';
 
-// Import browser tools from refactored module
-import * as browserTools from './browser';
+// Import search tools
+import { googleSearchTool } from './search/search-tool';
 
 // Define ZodObjectAny type for tool schema compatibility
 type ZodObjectAny = z.ZodObject<any, any, any, any>;
@@ -27,13 +29,13 @@ type ZodObjectAny = z.ZodObject<any, any, any, any>;
  * Map of all available tools by name
  */
 export const TOOLS = {
-  openUrl: openUrlTool as DynamicStructuredTool<ZodObjectAny>,
-  getPageUrl: getPageUrlTool as DynamicStructuredTool<ZodObjectAny>,
-  click: clickTool as DynamicStructuredTool<ZodObjectAny>,
-  enterText: enterTextTool as DynamicStructuredTool<ZodObjectAny>,
-  getDomFields: getDomFieldsTool as DynamicStructuredTool<ZodObjectAny>,
+  takeScreenshot: takeScreenshotTool as DynamicStructuredTool<ZodObjectAny>,
+  executeCommand: executeCommandTool as DynamicStructuredTool<ZodObjectAny>,
+  mouseMoveClick: mouseMoveClickTool as DynamicStructuredTool<ZodObjectAny>,
+  typeText: typeTextTool as DynamicStructuredTool<ZodObjectAny>,
+  pressKey: pressKeyTool as DynamicStructuredTool<ZodObjectAny>,
+  analyzeScreen: analyzeScreenTool as DynamicStructuredTool<ZodObjectAny>,
   googleSearch: googleSearchTool as DynamicStructuredTool<ZodObjectAny>,
-  pressKeyCombination: pressKeyCombinationTool as DynamicStructuredTool<ZodObjectAny>,
 };
 
 // List of all tools in a flat array
@@ -43,17 +45,17 @@ export const ALL_TOOLS = Object.values(TOOLS);
  * Map of all tools by category
  */
 export const TOOLS_BY_CATEGORY: Record<ToolCategory, DynamicStructuredTool<ZodObjectAny>[]> = {
-  [ToolCategory.NAVIGATION]: [
-    TOOLS.openUrl,
-    TOOLS.getPageUrl,
+  [ToolCategory.SCREENSHOT]: [
+    TOOLS.takeScreenshot,
+    TOOLS.analyzeScreen,
   ],
   [ToolCategory.INTERACTION]: [
-    TOOLS.click,
-    TOOLS.enterText,
-    TOOLS.pressKeyCombination,
+    TOOLS.mouseMoveClick,
+    TOOLS.typeText,
+    TOOLS.pressKey,
   ],
-  [ToolCategory.INFORMATION]: [
-    TOOLS.getDomFields,
+  [ToolCategory.TERMINAL]: [
+    TOOLS.executeCommand,
   ],
   [ToolCategory.SEARCH]: [
     TOOLS.googleSearch,
@@ -62,15 +64,15 @@ export const TOOLS_BY_CATEGORY: Record<ToolCategory, DynamicStructuredTool<ZodOb
 };
 
 /**
- * Get all browser tools
- * @returns Array of browser tools
+ * Get all computer tools
+ * @returns Array of computer tools
  */
-export function getBrowserTools(): ToolSet {
-  logger.debug('Getting browser tools');
+export function getComputerTools(): ToolSet {
+  logger.debug('Getting computer tools');
   const allTools: ToolSet = {
-    navigation: TOOLS_BY_CATEGORY[ToolCategory.NAVIGATION],
+    screenshot: TOOLS_BY_CATEGORY[ToolCategory.SCREENSHOT],
     interaction: TOOLS_BY_CATEGORY[ToolCategory.INTERACTION],
-    information: TOOLS_BY_CATEGORY[ToolCategory.INFORMATION],
+    terminal: TOOLS_BY_CATEGORY[ToolCategory.TERMINAL],
     utility: TOOLS_BY_CATEGORY[ToolCategory.UTILITY],
   };
 
@@ -103,5 +105,5 @@ export function getToolByName(name: string): DynamicStructuredTool<ZodObjectAny>
  */
 export { ToolCategory };
 
-// Export browser tools module
-export { browserTools };
+// Export computer tools
+export { COMPUTER_TOOLS };

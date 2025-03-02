@@ -1,34 +1,45 @@
 # R6D9 Agent Core
 
-A powerful Node.js library for browser automation and control powered by LLMs.
+A powerful Node.js library for general computer automation and control powered by LLMs, focusing on screenshot analysis and natural user interactions.
 
 ## Architecture
 
-The R6D9 Agent Core is built with a modular architecture focused on extensibility, maintainability, and performance. The system is organized into several key components:
+The R6D9 Agent Core is built with a modular architecture focused on versatile computer automation, extensibility, and maintainability. The system is organized into several key components:
+
+### Primary Interaction Approach
+
+R6D9 uses a comprehensive approach to computer automation:
+
+1. **Screenshot Analysis**: Captures and analyzes screen content to understand UI state
+2. **Mouse/Keyboard Control**: Interacts with applications like a human would
+3. **Terminal Commands**: Executes system operations via command line
+4. **AI-Powered Decision Making**: Uses LLMs to interpret screens and decide actions
+
+This approach allows agents to work with any application, making them versatile and human-like in their operation.
 
 ### Agents
 
-- **BrowserAgent**: Handles browser automation tasks
+- **ComputerAgent**: Controls computer through screenshots, mouse/keyboard, and terminal commands
 - **PlannerAgent**: Creates step-by-step plans for complex objectives
 - **CritiqueAgent**: Evaluates execution success and provides feedback
 
-### Workflows
+### Services
 
-- **Orchestrator**: Coordinates the agent execution in a LangGraph workflow
+- **ComputerService**: Core service that manages:
+  - Screenshot capture and analysis
+  - Mouse and keyboard control
+  - Terminal command execution
 
 ### Tools
 
 Tools are organized by category:
 
-- **Navigation Tools**: URL navigation, page history, loading management
-- **Interaction Tools**: Clicking, text entry, key presses, form filling 
-- **Information Tools**: DOM structure, form fields, page content
-- **Search Tools**: Web search capabilities
-- **Utility Tools**: Helper functions and general utilities
-
-### Services
-
-- **BrowserService**: Manages browser instances and page navigation
+- **Computer Tools**:
+  - **Screenshot Tools**: Capturing and analyzing screen
+  - **Mouse Tools**: Cursor movement and clicking
+  - **Keyboard Tools**: Text typing and key presses
+  - **Terminal Tools**: Shell command execution
+  - **Analysis Tools**: Screen content interpretation
 
 ### Configuration
 
@@ -49,18 +60,21 @@ Tools are organized by category:
 ## Usage
 
 ```typescript
-import { run, Orchestrator } from 'r6d9-agent-node';
+import { ComputerAgent, run } from 'r6d9-agent-node';
 
 // Simple usage with the run function
 const { start, stop, pause, resume } = run();
-start('Go to google.com and search for "LangGraph tutorial"');
+start('Open the Settings app and turn on Dark Mode');
 
-// Advanced usage with the Orchestrator
-const orchestrator = new Orchestrator();
-const result = await orchestrator.run(
-  'Go to google.com and search for "LangGraph tutorial". Extract the title and price of the first result.'
+// Advanced usage with the ComputerAgent
+const agent = new ComputerAgent();
+await agent.initialize();
+
+const result = await agent.execute(
+  'Open VS Code, create a new file, write a "Hello World" program in Python, and run it'
 );
 console.log('Result:', result);
+await agent.close();
 ```
 
 ## Directory Structure
@@ -68,12 +82,15 @@ console.log('Result:', result);
 ```
 core/
 ├── agents/            # Agent implementations
+│   ├── computer-agent.ts  # Main computer automation agent
+│   └── ...
 ├── config/            # Configuration
 ├── prompts/           # System prompts
 ├── services/          # Service implementations
+│   ├── computer-service.ts  # Core computer interaction service
+│   └── ...
 ├── tools/             # Tool implementations
-│   ├── browser/       # Browser-related tools
-│   ├── search/        # Search-related tools
+│   ├── computer/      # Computer interaction tools
 │   └── ...
 ├── types/             # TypeScript type definitions
 ├── utils/             # Utility functions
@@ -83,13 +100,14 @@ core/
 
 ## Best Practices
 
-1. **Modularity**: Each component should have a single responsibility
-2. **Type Safety**: Use TypeScript types for all interfaces
-3. **Error Handling**: Proper error handling and reporting
-4. **Documentation**: Comprehensive documentation for all components
-5. **Testing**: Unit and integration tests for all components
-6. **Configurability**: Make components configurable via options
-7. **Extensibility**: Design for extension and customization
+1. **Screenshot-First Approach**: Base interactions on screenshot analysis
+2. **Human-Like Interaction**: Use mouse/keyboard operations that mimic human behavior
+3. **Modularity**: Each component should have a single responsibility
+4. **Type Safety**: Use TypeScript types for all interfaces
+5. **Error Handling**: Proper error handling and reporting
+6. **Documentation**: Comprehensive documentation for all components
+7. **Testing**: Unit and integration tests for all components
+8. **Configurability**: Make components configurable via options
 
 ## Contributing
 

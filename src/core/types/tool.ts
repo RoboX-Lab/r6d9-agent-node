@@ -1,50 +1,79 @@
 /**
  * @file Type definitions for tools
- * @description Contains shared types used for browser and other tools
+ * @description Contains shared types used for computer interaction tools
  */
 
 import { DynamicStructuredTool } from '@langchain/core/tools';
 
 /**
- * Basic browser interaction types
+ * Screen coordinates for mouse operations
  */
-export type ElementSelector = {
-  /** CSS selector to identify the element */
-  query_selector: string;
+export type ScreenCoordinates = {
+  /** X coordinate on screen */
+  x: number;
+  /** Y coordinate on screen */
+  y: number;
 };
 
 /**
- * Text entry parameters
+ * Mouse click parameters
  */
-export type EnterTextEntry = ElementSelector & {
-  /** Text to enter in the element */
-  text: string;
-};
-
-/**
- * Click parameters
- */
-export type ClickEntry = ElementSelector & {
-  /** Optional text description of what is being clicked */
+export type MouseClickParams = ScreenCoordinates & {
+  /** Mouse button to use (left, right, middle) */
+  button?: 'left' | 'right' | 'middle';
+  /** Optional description of what is being clicked */
   description?: string;
 };
 
 /**
- * URL navigation parameters
+ * Text typing parameters
  */
-export type NavigationParams = {
-  /** URL to navigate to */
-  url: string;
-  /** Optional timeout in milliseconds */
-  timeout?: number;
+export type TypeTextParams = {
+  /** Text to type */
+  text: string;
+  /** Optional delay between keystrokes in milliseconds */
+  delay?: number;
 };
 
 /**
- * Key combination parameters
+ * Key press parameters
  */
-export type KeyCombinationParams = {
-  /** Key combination string (e.g., "Control+A") */
-  keys: string;
+export type KeyPressParams = {
+  /** Key or key combination to press (e.g., "enter", "control+c") */
+  key: string;
+};
+
+/**
+ * Command execution parameters
+ */
+export type CommandParams = {
+  /** Command to execute */
+  command: string;
+  /** Optional working directory */
+  cwd?: string;
+};
+
+/**
+ * Screenshot parameters
+ */
+export type ScreenshotParams = {
+  /** Optional name for the screenshot */
+  name?: string;
+};
+
+/**
+ * Screen analysis parameters
+ */
+export type AnalyzeScreenParams = {
+  /** Optional region of screen to analyze */
+  region?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  /** Optional prompt to guide the analysis */
+  prompt?: string;
 };
 
 /**
@@ -61,9 +90,9 @@ export type SearchParams = {
  * Collection of all tool instances
  */
 export type ToolSet = {
-  navigation: DynamicStructuredTool[];
+  screenshot: DynamicStructuredTool[];
   interaction: DynamicStructuredTool[];
-  information: DynamicStructuredTool[];
+  terminal: DynamicStructuredTool[];
   utility: DynamicStructuredTool[];
 };
 
@@ -71,9 +100,9 @@ export type ToolSet = {
  * Tool categories for organization
  */
 export enum ToolCategory {
-  NAVIGATION = 'navigation',
+  SCREENSHOT = 'screenshot',
   INTERACTION = 'interaction',
-  INFORMATION = 'information',
+  TERMINAL = 'terminal',
   SEARCH = 'search',
   UTILITY = 'utility',
 }
