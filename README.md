@@ -154,4 +154,4 @@ Weekly office hours: Every Thursday at 3PM UTC on Discord.
 
 MIT License - see the [LICENSE](./LICENSE) file for details.
 
-## Related Projects
+<!-- ## Related Projects -->
