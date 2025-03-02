@@ -45,7 +45,7 @@ Create a `.env` file in your project root:
 ```
 OPENAI_API_KEY=your_openai_api_key
 OPENAI_API_MODEL=gpt-4o                # Vision model (required)
-VIEWPORT_WIDTH=1280                    # Optional 
+VIEWPORT_WIDTH=1280                    # Optional
 VIEWPORT_HEIGHT=800                    # Optional
 SCREENSHOT_DIR=./screenshots           # Optional
 LOG_LEVEL=info                         # Optional
@@ -75,10 +75,11 @@ import { ComputerAgent } from 'r6d9-agent-node';
 async function main() {
   const agent = new ComputerAgent();
   await agent.initialize();
-  
-  const objective = 'Open the Notes app, create a new note, type "Meeting agenda for tomorrow", and save it';
+
+  const objective =
+    'Open the Notes app, create a new note, type "Meeting agenda for tomorrow", and save it';
   const result = await agent.execute(objective);
-  
+
   console.log('Task completed:', result);
   await agent.close();
 }
@@ -89,14 +90,17 @@ main().catch(console.error);
 ## Architecture
 
 ### Agents
+
 - **ComputerAgent**: Controls computer through screenshot analysis, mouse/keyboard, and terminal commands
 - **PlannerAgent**: Generates step-by-step plans based on user objectives
 - **CritiqueAgent**: Evaluates execution results and provides feedback
 
 ### Services
+
 - **ComputerService**: Core service for screen capture, mouse/keyboard control, and command execution
 
 ### Tools
+
 - **Screenshot Tools**: Capturing and analyzing screen state
 - **Mouse Tools**: Moving cursor and clicking on screen elements
 - **Keyboard Tools**: Typing text and keyboard shortcuts
@@ -110,6 +114,7 @@ For detailed API documentation and guides, visit our [documentation site](https:
 ## Use Cases
 
 ### System Automation
+
 ```typescript
 import { ComputerAgent } from 'r6d9-agent-node';
 
@@ -118,9 +123,9 @@ async function automateSystem() {
   await agent.initialize();
   try {
     const result = await agent.execute(
-      "Open System Preferences, navigate to Display settings, and change the screen resolution to 1920x1080"
+      'Open System Preferences, navigate to Display settings, and change the screen resolution to 1920x1080'
     );
-    console.log("Automation result:", result);
+    console.log('Automation result:', result);
   } finally {
     await agent.close();
   }
@@ -128,14 +133,16 @@ async function automateSystem() {
 ```
 
 ### Multi-Step Research
+
 ```typescript
 import { Orchestrator } from 'r6d9-agent-node';
 
 async function researchAndCompare() {
   const orchestrator = new Orchestrator();
-  const objective = 'Take a screenshot of the desktop, find all application icons, and create a list with their positions';
+  const objective =
+    'Take a screenshot of the desktop, find all application icons, and create a list with their positions';
   const result = await orchestrator.run(objective);
-  console.log("Analysis results:", result.response);
+  console.log('Analysis results:', result.response);
 }
 ```
 
@@ -161,7 +168,7 @@ npm run format
 
 Contributions are welcome! Please see [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for details.
 
-## Community and Support
+<!-- ## Community and Support
 
 - [GitHub Discussions](https://github.com/RoboX-Lab/r6d9-agent-node/discussions)
 - [Discord](https://r6d9.com/discord)
