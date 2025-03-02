@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/api",
+  "name": "R6D9 Agent Node API Reference",
+  "includeVersion": true,
+  "readme": "README.md",
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "theme": "default",
+  "plugin": ["typedoc-plugin-markdown"],
+  "tsconfig": "tsconfig.json"
+}
