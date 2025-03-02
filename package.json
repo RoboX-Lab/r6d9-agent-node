@@ -1,0 +1,8 @@
+{
+  "name": "r6d9-agent-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:RoboX-Lab/r6d9-agent-node.git",
+  "author": "yangxiaohu <yangxiaohu2015@163.com>",
+  "license": "MIT"
+}
