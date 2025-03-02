@@ -144,7 +144,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](./docs/CONTRIBUTING.md) 
 ## Community and Support
 
 - [GitHub Discussions](https://github.com/RoboX-Lab/r6d9-agent-node/discussions)
-- [Discord Server](https://r6d9.com/discord)
+- [Discord](https://r6d9.com/discord)
 - [Twitter](https://x.com/Roboagent69)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/r6d9-agent-node)
 
@@ -155,5 +155,3 @@ Weekly office hours: Every Thursday at 3PM UTC on Discord.
 MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ## Related Projects
-
-- [R6D9 Virtual Node](https://github.com/RoboX-Lab/r6d9-virtual-node) - Virtual browser environment for agents
