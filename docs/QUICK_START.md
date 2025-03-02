@@ -8,7 +8,7 @@ Before you begin, ensure you have the following:
 
 - Node.js version 20 or higher
 - npm or yarn package manager
-- An OpenAI API key
+- An OpenAI API key (with access to vision models like GPT-4o)
 
 ## Installation
 
@@ -26,41 +26,39 @@ Create a `.env` file in your project root with the following variables:
 
 ```
 OPENAI_API_KEY=your_openai_api_key
-OPENAI_API_MODEL=gpt-4o-2024-05-13  # Optional, defaults to latest model
-BROWSER_HEADLESS=true               # Set to false to see the browser
-BROWSER_TIMEOUT=30000               # Browser timeout in milliseconds
-LOG_LEVEL=info                      # debug, info, warn, or error
+OPENAI_API_MODEL=gpt-4o           # Vision-capable model required for screenshot analysis
+VIEWPORT_WIDTH=1280               # Default viewport width
+VIEWPORT_HEIGHT=800               # Default viewport height
+SCREENSHOT_DIR=./screenshots      # Directory to store screenshots
+LOG_LEVEL=info                    # debug, info, warn, or error
 ```
 
 ## Basic Usage
 
-### Simple Browser Automation
+### Computer Interaction with Screenshot Analysis
 
-Here's a basic example of using the BrowserAgent to navigate to a website and extract information:
+Here's a basic example of using the ComputerAgent to interact with your computer using screenshots and mouse/keyboard control:
 
 ```typescript
-import { BrowserAgent } from 'r6d9-agent-node';
+import { ComputerAgent } from 'r6d9-agent-node';
 import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config();
 
 async function main() {
-  // Create a new browser agent
-  const browserAgent = new BrowserAgent();
+  // Create a new computer agent
+  const computerAgent = new ComputerAgent();
   
   try {
-    // Navigate to a website and perform a task
-    const result = await browserAgent.navigate(
-      "Go to wikipedia.org, search for 'artificial intelligence', and summarize the first paragraph."
+    // Interact with the computer using screenshots and mouse/keyboard control
+    const result = await computerAgent.interact(
+      "Open the calculator app, perform 5+7, and tell me the result"
     );
     
-    console.log("Navigation result:", result);
+    console.log("Interaction result:", result);
   } catch (error) {
     console.error("Error:", error);
-  } finally {
-    // Always close the browser when done
-    await browserAgent.close();
   }
 }
 
@@ -80,7 +78,7 @@ dotenv.config();
 async function createPlan() {
   const planner = new PlannerAgent();
   
-  const objective = "Research the latest AI developments in healthcare and compile a summary.";
+  const objective = "Search for recent articles about climate change, take screenshots of the results, and save the information to a text file.";
   
   try {
     const plan = await planner.generatePlan(objective);
@@ -98,28 +96,34 @@ createPlan();
 
 ### Executing a Complete Workflow
 
-Use the Orchestrator to run a complete plan-execute-critique workflow:
+Use the Orchestrator to run a complete plan-execute-critique workflow using screenshot-based computer interaction:
 
 ```typescript
-import { Orchestrator } from 'r6d9-agent-node';
+import { Orchestrator, PlannerAgent, ComputerAgent, CritiqueAgent } from 'r6d9-agent-node';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 async function runWorkflow() {
-  const orchestrator = new Orchestrator();
+  const planner = new PlannerAgent();
+  const computer = new ComputerAgent();
+  const critique = new CritiqueAgent();
   
-  const objective = "Find the latest smartphone reviews on The Verge and summarize the top 3 phones.";
+  const orchestrator = new Orchestrator({
+    plannerAgent: planner,
+    executionAgent: computer,  // Using ComputerAgent for screenshot-based interaction
+    critiqueAgent: critique
+  });
+  
+  const objective = "Create a new text file on the desktop named 'report.txt' and write a short message in it.";
   
   try {
-    console.log("Starting workflow for objective:", objective);
+    const { start, stop } = orchestrator.run(objective);
     
-    const finalState = await orchestrator.run(objective);
+    // Start the workflow
+    await start();
     
-    console.log("Workflow complete!");
-    console.log("Final response:", finalState.response);
-    console.log("Success:", finalState.success);
-    console.log("History:", finalState.history);
+    console.log("Workflow completed successfully");
   } catch (error) {
     console.error("Workflow error:", error);
   }
@@ -128,199 +132,113 @@ async function runWorkflow() {
 runWorkflow();
 ```
 
-## Customizing Agents
+## Low-Level Computer Interaction
 
-### Custom Browser Agent Configuration
-
-You can customize the behavior of the BrowserAgent:
+For direct control of computer interaction components:
 
 ```typescript
-import { BrowserAgent } from 'r6d9-agent-node';
+import { ComputerService } from 'r6d9-agent-node';
+import dotenv from 'dotenv';
 
-const browserAgent = new BrowserAgent({
-  modelName: 'gpt-4o-2024-05-13',
-  temperature: 0.2,
-  maxTokens: 2000,
-  maxRetries: 3
-});
+dotenv.config();
 
-// Use the custom configured agent
-const result = await browserAgent.navigate("Your task here");
-```
+async function directComputerControl() {
+  const computerService = new ComputerService();
+  
+  try {
+    // Take a screenshot
+    const screenshotPath = await computerService.takeScreenshot();
+    console.log(`Screenshot saved to: ${screenshotPath}`);
+    
+    // Move mouse to coordinates
+    await computerService.mouseMove(500, 500);
+    
+    // Click
+    await computerService.mouseClick();
+    
+    // Type text
+    await computerService.typeText('Hello, world!', 100); // 100ms delay between keystrokes
+    
+    // Press a key
+    await computerService.pressKey('Enter');
+    
+    // Execute a terminal command
+    const { stdout } = await computerService.executeCommand('ls -la');
+    console.log('Command output:', stdout);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
 
-### Custom Planner Agent
-
-Customize the planner for different planning styles:
-
-```typescript
-import { PlannerAgent } from 'r6d9-agent-node';
-
-const detailedPlanner = new PlannerAgent({
-  modelName: 'gpt-4o-2024-05-13',
-  temperature: 0.1, // Low temperature for more deterministic plans
-  maxTokens: 4000  // More tokens for detailed plans
-});
-
-const plan = await detailedPlanner.generatePlan(
-  "Research and compile a comprehensive report on renewable energy trends.",
-  "", // No original plan
-  "Make sure to include market projections and policy impacts." // Feedback
-);
+directComputerControl();
 ```
 
 ## Advanced Usage
 
-### Handling Plan Revisions
-
-When a step fails, you can use feedback to revise the plan:
+### Using Computer Tools Individually
 
 ```typescript
-import { PlannerAgent, CritiqueAgent, BrowserAgent } from 'r6d9-agent-node';
+import { 
+  takeScreenshotTool, 
+  analyzeScreenTool, 
+  mouseMoveClickTool, 
+  typeTextTool 
+} from 'r6d9-agent-node';
+import dotenv from 'dotenv';
 
-async function planWithRevision() {
-  const planner = new PlannerAgent();
-  const browser = new BrowserAgent();
-  const critique = new CritiqueAgent();
-  
-  const objective = "Find the current weather in Tokyo.";
-  
+dotenv.config();
+
+async function useIndividualTools() {
   try {
-    // Generate initial plan
-    let plan = await planner.generatePlan(objective);
-    console.log("Initial plan:", plan);
+    // Take a screenshot
+    const screenshotPath = await takeScreenshotTool();
     
-    // Try executing the first step
-    const currentStep = plan[0];
-    const pageContent = await browser.navigate(currentStep);
+    // Analyze the screen
+    const analysis = await analyzeScreenTool({
+      screenshotPath,
+      question: "Where is the search box located?"
+    });
     
-    // Evaluate the result
-    const evaluation = await critique.evaluate(objective, currentStep, pageContent);
+    // Based on analysis, move and click
+    await mouseMoveClickTool({
+      x: 500,  // Coordinates determined by analysis
+      y: 300
+    });
     
-    if (!evaluation.success) {
-      console.log("Step failed. Reason:", evaluation.reason);
-      console.log("Revising plan with feedback...");
-      
-      // Generate a revised plan based on feedback
-      const revisedPlan = await planner.generatePlan(
-        objective,
-        plan.join('\n'),
-        evaluation.reason
-      );
-      
-      console.log("Revised plan:", revisedPlan);
-    }
+    // Type some text
+    await typeTextTool({
+      text: "climate change research",
+      delay: 50  // 50ms delay between keystrokes
+    });
+    
+    console.log("Tools executed successfully");
   } catch (error) {
-    console.error("Error:", error);
-  } finally {
-    await browser.close();
+    console.error("Tool error:", error);
   }
 }
 
-planWithRevision();
-```
-
-### Using Run Controls
-
-The `run` method provides control functions to manage execution:
-
-```typescript
-import { BrowserAgent } from 'r6d9-agent-node';
-
-async function controlledExecution() {
-  const browser = new BrowserAgent();
-  
-  // Start a controllable execution
-  const controls = browser.run(
-    "Research electric vehicles, focusing on Tesla, Rivian, and Lucid."
-  );
-  
-  // You can now control the execution
-  setTimeout(() => {
-    console.log("Pausing execution...");
-    controls.pause();
-    
-    setTimeout(() => {
-      console.log("Resuming execution...");
-      controls.resume();
-      
-      setTimeout(() => {
-        console.log("Stopping execution...");
-        controls.stop();
-      }, 10000);
-    }, 5000);
-  }, 5000);
-}
-
-controlledExecution();
-```
-
-## Error Handling
-
-Implement proper error handling in your applications:
-
-```typescript
-import { BrowserAgent, logger } from 'r6d9-agent-node';
-
-async function robustNavigation() {
-  const browser = new BrowserAgent();
-  
-  try {
-    const result = await browser.navigate("Go to a non-existent website example123456789.com");
-    console.log(result);
-  } catch (error) {
-    logger.error("Navigation failed", error);
-    
-    // Try an alternative approach
-    try {
-      logger.info("Attempting alternative approach");
-      const altResult = await browser.navigate(
-        "Search for 'example123456789.com' on Google and check if it exists"
-      );
-      console.log("Alternative approach result:", altResult);
-    } catch (altError) {
-      logger.error("Alternative approach also failed", altError);
-    }
-  } finally {
-    await browser.close();
-  }
-}
-
-robustNavigation();
+useIndividualTools();
 ```
 
 ## Next Steps
 
-Now that you're familiar with the basics of R6D9 Agent Node, explore these resources to learn more:
+Once you've mastered the basics, check out these resources:
 
-- [API Reference](./API_REFERENCE.md) - Detailed documentation of all classes and methods
-- [Architecture Overview](./ARCHITECTURE.md) - Understanding the system design
-- [Example Recipes](../examples/README.md) - Common patterns and use cases
-- [Contributing Guide](../CONTRIBUTING.md) - How to contribute to the project
+- [API Reference](./API_REFERENCE.md) - Complete documentation of all classes and methods
+- [Architecture](./ARCHITECTURE.md) - Understanding the framework architecture
+- [Extending Framework](./EXTENDING_FRAMEWORK.md) - Building custom agents and tools
+- [Contributing](./CONTRIBUTING.md) - How to contribute to the project
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Browser Launch Failures**
-   - Ensure you have the necessary browser dependencies installed
-   - Try setting `BROWSER_HEADLESS=false` to see what's happening
+1. **OpenAI API Errors**: Ensure your API key has access to the required models (GPT-4o) and check your API usage limits.
 
-2. **API Key Errors**
-   - Check that your `OPENAI_API_KEY` is correctly set
-   - Verify that your API key has sufficient permissions and quota
+2. **Screenshot Capture Failures**: Different operating systems may require specific permissions for screenshot capture. Check your system settings.
 
-3. **Timeout Errors**
-   - Increase `BROWSER_TIMEOUT` for complex navigation tasks
-   - Consider breaking complex tasks into smaller steps
+3. **Mouse/Keyboard Control Issues**: Some systems may have security restrictions on programmatic mouse/keyboard control. Check your system permissions.
 
-4. **TypeScript Errors**
-   - Ensure you're using TypeScript 5.x or higher
-   - Check that the types are correctly imported
+4. **Vision Model Response Time**: Screenshot analysis can take longer than text-only queries. Adjust your timeouts accordingly.
 
-### Getting Help
-
-If you encounter issues not covered here:
-
-- Check the [GitHub Issues](https://github.com/RoboX-Lab/r6d9-agent-node/issues) for similar problems
-- Join our community Discord for real-time assistance
-- Review the detailed logs (set `LOG_LEVEL=debug` for verbose logging)
+For more help, please check our GitHub issues or join our community Discord channel.

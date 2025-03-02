@@ -1,20 +1,34 @@
 # R6D9 Agent Node
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D5.0.0-blue.svg)](https://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/r6d9-agent-node.svg)](https://www.npmjs.com/package/r6d9-agent-node)
 
-A powerful TypeScript framework for building browser automation agents powered by Large Language Models (LLMs).
+A powerful TypeScript framework for building computer automation agents powered by Large Language Models (LLMs), focusing on screenshot analysis, mouse/keyboard control, and terminal command execution.
 
 ## Features
 
-- **LLM-Powered Browser Automation**: Control web browsers intelligently with LLMs
+- **Computer Interaction through Screenshots**: Control computers by analyzing screenshots with vision models
+- **Mouse and Keyboard Automation**: Precise control of mouse movements, clicks, and keyboard inputs
+- **Terminal Command Execution**: Execute and analyze terminal commands
+- **AI-Powered Computer Vision**: Analyze screen content to make intelligent decisions
 - **Agent Architecture**: Modular, loosely-coupled agents for different responsibilities
 - **Workflow Orchestration**: Create coordinated workflows with LangGraph
 - **Type-Safe**: Fully typed with TypeScript for robust development
 - **Extensible Design**: Easily extend with custom tools and agents
-- **Zero-Config Operation**: Works out of the box with sensible defaults
+
+## Technical Approach
+
+This framework prioritizes natural computer interaction:
+
+1. **Screenshot-based interaction**
+   - Captures screenshots to understand screen state
+   - Uses vision models to identify UI elements
+   - Controls mouse/keyboard based on visual analysis
+   - Executes terminal commands when needed
+
+This approach creates versatile agents that can operate across different applications, making them closer to how humans interact with computers.
 
 ## Installation
 
@@ -30,10 +44,11 @@ Create a `.env` file in your project root:
 
 ```
 OPENAI_API_KEY=your_openai_api_key
-OPENAI_API_MODEL=gpt-4o-2024-05-13  # Optional
-BROWSER_HEADLESS=true               # Optional
-BROWSER_TIMEOUT=30000               # Optional
-LOG_LEVEL=info                      # Optional
+OPENAI_API_MODEL=gpt-4o                # Vision model (required)
+VIEWPORT_WIDTH=1280                    # Optional 
+VIEWPORT_HEIGHT=800                    # Optional
+SCREENSHOT_DIR=./screenshots           # Optional
+LOG_LEVEL=info                         # Optional
 ```
 
 ## Quick Start
@@ -45,25 +60,27 @@ import { run } from 'r6d9-agent-node';
 
 async function main() {
   const { start, stop } = run();
-  await start('Go to google.com and search for "TypeScript automation frameworks"');
+  await start('Open the calculator app, calculate 125 × 37, and report the result');
   await stop();
 }
 
 main().catch(console.error);
 ```
 
-### Advanced Usage with Orchestrator
+### Advanced Usage with ComputerAgent
 
 ```typescript
-import { Orchestrator } from 'r6d9-agent-node';
+import { ComputerAgent } from 'r6d9-agent-node';
 
 async function main() {
-  const orchestrator = new Orchestrator();
-  const objective = 'Search for Node.js frameworks on Google and extract the top 3 results';
-  const result = await orchestrator.run(objective);
+  const agent = new ComputerAgent();
+  await agent.initialize();
   
-  console.log('Workflow completed:', result.success);
-  console.log('Steps executed:', result.steps);
+  const objective = 'Open the Notes app, create a new note, type "Meeting agenda for tomorrow", and save it';
+  const result = await agent.execute(objective);
+  
+  console.log('Task completed:', result);
+  await agent.close();
 }
 
 main().catch(console.error);
@@ -72,17 +89,19 @@ main().catch(console.error);
 ## Architecture
 
 ### Agents
-- **BrowserAgent**: Controls browser and executes actions using Playwright
+- **ComputerAgent**: Controls computer through screenshot analysis, mouse/keyboard, and terminal commands
 - **PlannerAgent**: Generates step-by-step plans based on user objectives
 - **CritiqueAgent**: Evaluates execution results and provides feedback
 
-### Workflows
-- **Orchestrator**: Coordinates execution flow between agents using LangGraph
+### Services
+- **ComputerService**: Core service for screen capture, mouse/keyboard control, and command execution
 
 ### Tools
-- **Navigation Tools**: Browser navigation, history management
-- **DOM Tools**: Element selection, form manipulation
-- **Search Tools**: Web search capabilities
+- **Screenshot Tools**: Capturing and analyzing screen state
+- **Mouse Tools**: Moving cursor and clicking on screen elements
+- **Keyboard Tools**: Typing text and keyboard shortcuts
+- **Terminal Tools**: Executing shell commands
+- **Analysis Tools**: AI-powered screen content analysis
 
 ## Documentation
 
@@ -90,17 +109,18 @@ For detailed API documentation and guides, visit our [documentation site](https:
 
 ## Use Cases
 
-### Content Monitoring
+### System Automation
 ```typescript
-import { BrowserAgent } from 'r6d9-agent-node';
+import { ComputerAgent } from 'r6d9-agent-node';
 
-async function monitorWebsite() {
-  const agent = new BrowserAgent();
+async function automateSystem() {
+  const agent = new ComputerAgent();
+  await agent.initialize();
   try {
-    const checkForUpdates = await agent.navigate(
-      "Go to example.com/blog, check if there are any new articles today, and extract their titles and publish dates"
+    const result = await agent.execute(
+      "Open System Preferences, navigate to Display settings, and change the screen resolution to 1920x1080"
     );
-    console.log("Content check results:", checkForUpdates);
+    console.log("Automation result:", result);
   } finally {
     await agent.close();
   }
@@ -113,9 +133,9 @@ import { Orchestrator } from 'r6d9-agent-node';
 
 async function researchAndCompare() {
   const orchestrator = new Orchestrator();
-  const objective = 'Research the top 3 electric vehicles by range, find their prices, and create a comparison table';
+  const objective = 'Take a screenshot of the desktop, find all application icons, and create a list with their positions';
   const result = await orchestrator.run(objective);
-  console.log("Comparison results:", result.response);
+  console.log("Analysis results:", result.response);
 }
 ```
 
@@ -151,4 +171,3 @@ Contributions are welcome! Please see [CONTRIBUTING.md](./docs/CONTRIBUTING.md) 
 ## License
 
 MIT License - see the [LICENSE](./LICENSE) file for details.
-

@@ -39,8 +39,8 @@ Please review our [Code of Conduct](../md/CODE_OF_CONDUCT.md) to understand expe
 
    ```
    OPENAI_API_KEY=your_openai_api_key
-   OPENAI_API_MODEL=gpt-4-0125-preview
-   BROWSER_HEADLESS=true
+   OPENAI_API_MODEL=gpt-4o
+   SCREENSHOT_DIR=./screenshots
    LOG_LEVEL=debug
    ```
 
@@ -84,9 +84,9 @@ Please review our [Code of Conduct](../md/CODE_OF_CONDUCT.md) to understand expe
    Use conventional commit messages:
 
    ```bash
-   git commit -m "feat: add new browser navigation capability"
+   git commit -m "feat: add new screenshot analysis capability"
    # or
-   git commit -m "fix: resolve issue with page content extraction"
+   git commit -m "fix: resolve issue with mouse click positioning"
    ```
 
 5. **Push to Your Fork**
@@ -101,121 +101,106 @@ Please review our [Code of Conduct](../md/CODE_OF_CONDUCT.md) to understand expe
 
 ## Pull Request Process
 
-1. **PR Description**
-
-   - Provide a detailed description of the changes
-   - Link related issues with "Fixes #123" or "Related to #123"
-   - Include screenshots for UI changes
-   - List any breaking changes
-
-2. **Review Process**
-
-   - Maintainers will review your PR
-   - Address any requested changes
-   - Ensure CI checks pass
-
-3. **Merge Requirements**
-
-   - At least one maintainer approval
-   - All CI checks passing
-   - Up-to-date with main branch
+1. **Ensure all tests pass**
+2. **Update documentation** to reflect any changes
+3. **Add necessary unit and integration tests**
+4. **Describe your changes** in detail in the PR description
+5. **Link any related issues** using GitHub keywords
+6. **Request review** from at least one maintainer
 
 ## Coding Standards
 
-We follow TypeScript best practices and have configured ESLint and Prettier to maintain consistent code style.
+### 1. TypeScript Best Practices
 
-1. **TypeScript**
+- Use strong typing; avoid `any` where possible
+- Follow [TypeScript coding guidelines](https://github.com/basarat/typescript-book/blob/master/docs/styleguide/styleguide.md)
+- Document public functions with JSDoc comments
 
-   - Use strong typing; avoid `any` when possible
-   - Leverage interfaces and type definitions
-   - Document public APIs with JSDoc comments
+### 2. Project Structure
 
-2. **Code Style**
+- Place new agents in the `src/core/agents` directory
+- Place new tools in `src/core/tools` (organized by category)
+- Place services in `src/core/services`
+- Place utility functions in `src/core/utils`
 
-   - Follow the configured ESLint and Prettier rules
-   - Run `npm run lint` and `npm run format` before committing
+### 3. Error Handling
 
-3. **Naming Conventions**
-
-   - Use descriptive names for variables, functions, and classes
-   - `camelCase` for variables and functions
-   - `PascalCase` for classes, interfaces, and types
-   - `UPPER_SNAKE_CASE` for constants
+- Use try/catch blocks for error handling
+- Log errors with appropriate context
+- Provide meaningful error messages
 
 ## Testing Guidelines
 
-1. **Test Coverage**
+### 1. Test Types
 
-   - Aim for high test coverage for new features
-   - Write both unit and integration tests
+- **Unit Tests**: Test individual functions and classes
+- **Integration Tests**: Test interactions between components
+- **Visual Tests**: Test screenshot analysis and computer interaction
 
-2. **Test Organization**
+### 2. Testing Tools
 
-   - Place tests in the `/tests` directory
-   - Match the source directory structure
-   - Name test files with `.test.ts` suffix
+- Use Jest for unit and integration tests
+- Use mocks for external services
+- Test screenshot analysis with sample images
 
-3. **Running Tests**
+### 3. Test Coverage
 
-   ```bash
-   # Run all tests
-   npm test
-   
-   # Run specific test suites
-   npm run test:unit
-   npm run test:integration
-   
-   # Run with coverage
-   npm run test:coverage
-   ```
+- Aim for 80% code coverage
+- Focus on testing critical paths
+- Test error handling
 
 ## Documentation Guidelines
 
-1. **Code Documentation**
+### 1. Code Documentation
 
-   - Use JSDoc comments for classes, methods, and functions
-   - Include parameter descriptions and return types
-   - Document exceptions and edge cases
+- Use JSDoc for all public APIs
+- Document parameters and return types
+- Include examples for complex functions
 
-2. **README and Guides**
+### 2. Markdown Documentation
 
-   - Update README.md with any new features
-   - Create or update guides for significant functionality
-   - Include examples that demonstrate usage
+- Keep README and other markdown files up to date
+- Use proper headings and formatting
+- Include code examples where appropriate
 
-3. **Example Code**
+### 3. Architecture Documentation
 
-   - Add examples for new features in the `/examples` directory
-   - Ensure examples are well-commented and working
+- Document significant architectural decisions
+- Update diagrams when architecture changes
+- Explain interaction patterns and data flow
 
 ## Architecture Guidelines
 
-1. **Module Structure**
+### 1. Component Design
 
-   - Keep modules focused on a single responsibility
-   - Follow the established directory structure
-   - Use appropriate dependency injection
+- Follow the single responsibility principle
+- Design for reusability and testability
+- Minimize dependencies between components
 
-2. **Agent Design**
+### 2. Agent Development
 
-   - Agents should have clear, focused responsibilities
-   - Agent APIs should be consistent with existing patterns
-   - New agents should be extensively tested
+- Agents should focus on a specific task domain
+- Agents should expose a consistent API
+- Agents should handle their own resources
 
-3. **Tool Development**
+### 3. Tool Development
 
-   - Tools should be atomic, focused utilities
-   - Tools should have proper error handling
-   - Tools should be well-documented
+- Tools should be atomic, focused utilities
+- Tools should have proper error handling
+- Tools should be well-documented
+
+### 4. Vision and Computer Interaction Principles
+
+- Prefer screenshot analysis over API-based interactions
+- Design robust UI element detection
+- Include fallback strategies when vision-based methods fail
+- Implement natural, human-like mouse and keyboard interactions
+- Handle coordinate systems consistently across platforms
 
 ## Community
 
-Join our community discussions:
+- Join our [Discord server](https://discord.gg/r6d9-community) for discussions
+- Participate in community calls (announced on Discord)
+- Follow our [Twitter](https://twitter.com/r6d9project) for updates
 
-- **GitHub Discussions**: For feature ideas and community support
-- **Issue Tracker**: For bugs and confirmed issues
-- **Discord**: For real-time discussion with the community
-
-## Thank You!
-
-Your contributions help make R6D9 Agent Node better for everyone. We truly appreciate your time and effort!
+Thank you for contributing to make R6D9 Agent Node better!
