@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && tsc src/main.ts --outDir dist",
+    "build": "tsc",
     "start": "node dist/main.js",
     "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "lint": "eslint 'src/**/*.{ts,js}'",
@@ -15,17 +15,9 @@
     "test:unit": "jest --testMatch '**/tests/**/*.unit.test.ts'",
     "test:integration": "jest --testMatch '**/tests/**/*.integration.test.ts'",
     "test:e2e": "jest --testMatch '**/tests/**/*.e2e.test.ts'",
-    "example:basic": "ts-node examples/basic-search-example.ts",
-    "example:navigation": "ts-node examples/basic/browser-navigation.ts",
-    "example:keyboard": "ts-node examples/basic/keyboard-input.ts",
-    "example:dom": "ts-node examples/dom/dom-manipulation.ts",
-    "example:dom-tree": "ts-node examples/dom/dom-tree.ts",
-    "example:ecommerce": "ts-node examples/ecommerce-product-comparison.ts",
-    "example:solana": "ts-node examples/blockchain/solana-token-info.ts",
-    "example:market": "ts-node examples/blockchain/market-analysis.ts",
+    "example": "ts-node examples/basic-search-example.ts",
     "docs:generate": "typedoc --options typedoc.json",
-    "prepublishOnly": "npm run build && npm run test",
-    "prepare": "npm run build"
+    "prepublishOnly": "npm run build && npm run test"
   },
   "keywords": [
     "browser",
@@ -34,7 +26,6 @@
     "ai",
     "langchain",
     "playwright",
-    "virtual-node",
     "browser-automation",
     "dom-manipulation",
     "agent"
@@ -52,9 +43,6 @@
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@playwright/test": "^1.50.1",
-    "@rollup/plugin-node-resolve": "^16.0.0",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@solana/web3.js": "^1.87.3",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.1",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
@@ -62,7 +50,6 @@
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "https-proxy-agent": "^7.0.6",
     "jest": "^29.7.0",
     "prettier": "^3.4.2",
     "ts-jest": "^29.2.5",
@@ -81,10 +68,8 @@
     "axios": "^1.7.9",
     "consola": "^3.4.0",
     "dotenv": "^16.4.7",
-    "langchain": "^0.3.15",
     "openai": "^4.85.1",
-    "playwright": "^1.50.1",
-    "steel-sdk": "^0.1.0-beta.9"
+    "playwright": "^1.50.1"
   },
   "engines": {
     "node": ">=20.0.0"
