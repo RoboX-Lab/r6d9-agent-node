@@ -5,7 +5,23 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D5.0.0-blue.svg)](https://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/r6d9-agent-node.svg)](https://www.npmjs.com/package/r6d9-agent-node)
 
-A powerful TypeScript framework for building computer automation agents powered by Large Language Models (LLMs), focusing on screenshot analysis, mouse/keyboard control, and terminal command execution.
+## What is R6D9?
+
+R6D9 is a next-generation AI-powered automation platform that integrates Large Language Models (LLMs) and Visual Language Models (VLMs) to automate tasks across computers, mobile devices, and more. R6D9 serves as your personal AI assistant, understanding tasks, breaking them down into subtasks, and handling execution with the ability to effectively manage failures.
+
+What sets R6D9 apart is its vision-based end-to-end training strategy, making it highly adaptable to handle unseen tasks and new tools. The platform leverages a flexible combination of VLMs and LLMs to tackle tasks dynamically, making it more resilient, adaptive, and intelligent than traditional rule-based automation solutions.
+
+## Why is R6D9 Different?
+
+Unlike traditional rule-based automation tools that don't adapt well to change, R6D9:
+
+- **Uses Multimodal Collaboration**: VLMs visually interact with your device's interface, avoiding outdated and error-prone methods used by traditional automation scripts.
+  
+- **Employs Contextual Planning**: Through LLMs and reinforcement learning, R6D9 learns from each task and adapts to new ones, optimizing its actions based on what it's learned.
+  
+- **Enables Cross-Device Integration**: Designed to run across different devices, from desktops to phones to robotics, making it perfect for users who need automation across multiple platforms.
+  
+- **Harnesses Community Contributions**: Improves through user prompts, task recordings, and feedback, creating a continuous learning loop.
 
 ## Features
 
@@ -13,22 +29,41 @@ A powerful TypeScript framework for building computer automation agents powered 
 - **Mouse and Keyboard Automation**: Precise control of mouse movements, clicks, and keyboard inputs
 - **Terminal Command Execution**: Execute and analyze terminal commands
 - **AI-Powered Computer Vision**: Analyze screen content to make intelligent decisions
-- **Agent Architecture**: Modular, loosely-coupled agents for different responsibilities
-- **Workflow Orchestration**: Create coordinated workflows with LangGraph
+- **Multi-Agentic Architecture**: Coordinated agents with different responsibilities working together to complete tasks
+- **Workflow Orchestration**: Create complex workflows with LangGraph
+- **Adaptive Learning**: Continuously improve through reinforcement learning and community feedback
 - **Type-Safe**: Fully typed with TypeScript for robust development
 - **Extensible Design**: Easily extend with custom tools and agents
 
-## Technical Approach
+## Technical Approach & Architecture
 
-This framework prioritizes natural computer interaction:
+R6D9's intelligent automation architecture combines:
 
-1. **Screenshot-based interaction**
-   - Captures screenshots to understand screen state
-   - Uses vision models to identify UI elements
-   - Controls mouse/keyboard based on visual analysis
-   - Executes terminal commands when needed
+1. **Action Space**: Operations corresponding to different devices (clicking, copying, pasting, etc.)
+2. **Contextual DB**: Stores the interaction history, including model planning, executed actions, and key frames
+3. **Reinforcement Learning**: Dynamically adjusts action execution strategy based on feedback
+4. **Multi-Agentic Controller**: Uses VLM technology to perceive the current environment and determine the next action
 
-This approach creates versatile agents that can operate across different applications, making them closer to how humans interact with computers.
+Our framework prioritizes natural computer interaction:
+
+- **Screenshot-based interaction**
+  - Captures screenshots to understand screen state
+  - Uses vision models to identify UI elements
+  - Controls mouse/keyboard based on visual analysis
+  - Executes terminal commands when needed
+
+This approach creates versatile agents that operate across different applications, mimicking how humans interact with computers and making automation more intuitive and effective.
+
+## Vision & Roadmap
+
+We're building R6D9 with an ambitious vision:
+
+1. **Expanding to Full Computer Use Agents**: Taking automation beyond browsers into every aspect of computer usage
+2. **Creating Specialized Agents**: Building a system of agents with different skills working across multiple devices
+3. **Developing an Agent Training Platform**: Creating tools to train, generate, and customize agents
+4. **Leveraging Web3 Technologies**: Building a decentralized ecosystem where privacy and security are guaranteed
+
+Through community collaboration and continuous improvement, R6D9 aims to become a platform that bridges agents and humans to digital worlds (Web2 + Web3).
 
 ## Installation
 
