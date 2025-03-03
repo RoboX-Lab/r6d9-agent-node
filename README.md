@@ -69,23 +69,71 @@ Through community collaboration and continuous improvement, R6D9 aims to become 
 
 ### R6D9-Agent-Node vs Browser-Use Automation Solutions
 
-| | R6D9-Agent-Node | Browser-Use |
-|---------|-----------------|------------------------|
-| **Core Differences** | • TypeScript-based multi-agent collaborative system | • Single agent model, limited to browser environment |
-| | • Vision-driven + system API hybrid automation | • DOM structure-dependent interaction method |
-| | • LangGraph state diagram-driven workflow | • Linear execution flow + simple branching |
-| | • System-wide operation capabilities | • Browser sandbox scope limitations |
-| **Advantages** | • Cross-system multi-application automation capability | • Low resource consumption and fast execution |
-| | • Visual understanding reduces page structure dependency | • Simple deployment and quick start |
-| | • Strong adaptability to UI changes | • Security provided by browser sandbox |
-| | • Multi-agent collaboration for complex problem solving | • Optimized performance for web-specific interactions |
-| **Disadvantages** | • High computational resource requirements | • Operation scope limited to browser environment |
-| | • Complex setup and steep learning curve | • Heavy dependency on DOM structure stability |
-| | • Security considerations from system permission requirements | • Prone to failure when websites update |
-| | • Execution delays due to visual processing | • High maintenance difficulty in complex scenarios |
-| **Best Application Scenarios** | • Cross-application complex workflows | • Simple webpage form filling |
-| | • Interactions requiring visual understanding | • Lightweight data scraping |
-| | • System-level automation tasks | • Resource-constrained environments |
+<table>
+  <tr>
+    <th>Category</th>
+    <th>R6D9-Agent-Node</th>
+    <th>Browser-Use</th>
+  </tr>
+  <tr>
+    <td>Core Differences</td>
+    <td>
+      • TypeScript-based multi-agent collaborative system<br><br>
+      • Vision-driven + system API hybrid automation<br><br>
+      • LangGraph state diagram-driven workflow<br><br>
+      • System-wide operation capabilities
+    </td>
+    <td>
+      • Single agent model, limited to browser environment<br><br>
+      • DOM structure-dependent interaction method<br><br>
+      • Linear execution flow + simple branching<br><br>
+      • Browser sandbox scope limitations
+    </td>
+  </tr>
+  <tr>
+    <td>Advantages</td>
+    <td>
+      • Cross-system multi-application automation capability<br><br>
+      • Visual understanding reduces page structure dependency<br><br>
+      • Strong adaptability to UI changes<br><br>
+      • Multi-agent collaboration for complex problem solving
+    </td>
+    <td>
+      • Low resource consumption and fast execution<br><br>
+      • Simple deployment and quick start<br><br>
+      • Security provided by browser sandbox<br><br>
+      • Optimized performance for web-specific interactions
+    </td>
+  </tr>
+  <tr>
+    <td>Disadvantages</td>
+    <td>
+      • High computational resource requirements<br><br>
+      • Complex setup and steep learning curve<br><br>
+      • Security considerations from system permission requirements<br><br>
+      • Execution delays due to visual processing
+    </td>
+    <td>
+      • Operation scope limited to browser environment<br><br>
+      • Heavy dependency on DOM structure stability<br><br>
+      • Prone to failure when websites update<br><br>
+      • High maintenance difficulty in complex scenarios
+    </td>
+  </tr>
+  <tr>
+    <td>Best Application Scenarios</td>
+    <td>
+      • Cross-application complex workflows<br><br>
+      • Interactions requiring visual understanding<br><br>
+      • System-level automation tasks
+    </td>
+    <td>
+      • Simple webpage form filling<br><br>
+      • Lightweight data scraping<br><br>
+      • Resource-constrained environments
+    </td>
+  </tr>
+</table>
 
 R6D9-Agent-Node provides a more robust, adaptable solution for complex automation scenarios that span across multiple applications and require visual understanding. While browser-based automation tools are simpler to set up and use for basic web tasks, they often struggle with UI changes and complex workflows that R6D9-Agent-Node handles naturally.
 
