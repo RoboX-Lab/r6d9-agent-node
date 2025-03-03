@@ -69,24 +69,23 @@ Through community collaboration and continuous improvement, R6D9 aims to become 
 
 ### R6D9-Agent-Node vs Browser-Use Automation Solutions
 
-| Feature | R6D9-Agent-Node | Browser-Use Automation |
+| | R6D9-Agent-Node | Browser-Use |
 |---------|-----------------|------------------------|
-| **Architectural Approaches** | TypeScript-based multi-agent collaborative system | Single agent model, limited to browser environment |
-|  | Vision-driven + system API hybrid automation | DOM structure-dependent interaction method |
-|  | LangGraph state diagram-driven workflow | Linear execution flow + simple branching |
-|  | Strong type system (TypeScript + Zod) | Fragile selector dependencies |
-|  | System-wide operation capabilities | Browser sandbox scope limitations |
-| **Core Differences** | Visual understanding + System API calls | DOM manipulation + JavaScript execution |
-|  | Adapts to UI changes, understands visual feedback | Heavily dependent on page structure stability |
-|  | System-wide multi-application coordination | Limited to operations within the browser |
-|  | Complex architecture, steep learning curve | Simple to start, difficult to maintain in complex scenarios |
-| **Advantages** | Universal Automation: Can operate across the entire system and multiple applications | Low Resource Requirements: Minimal CPU and memory usage |
-|  | Visual Understanding: Interprets UI elements visually, reducing dependency on DOM structure | Easy Deployment: Simple setup with minimal dependencies |
-|  | Adaptability: Naturally adjusts to UI changes and visual feedback | Quick Start: Low barrier to entry for basic automation tasks |
-|  | Robust Architecture: Multi-agent collaboration enables complex problem-solving | Security Isolation: Operates within browser sandbox for better security |
-|  | Error Recovery: Sophisticated error handling and recovery strategies | Speed: Direct DOM access provides faster execution for simple tasks |
-|  | Type Safety: Strong typing reduces runtime errors and improves maintainability | Specialized Web Handling: Optimized for web-specific interactions |
-|  | Complex Workflows: Excels at multi-step, cross-application tasks |  |
+| **Core Differences** | • TypeScript-based multi-agent collaborative system | • Single agent model, limited to browser environment |
+| | • Vision-driven + system API hybrid automation | • DOM structure-dependent interaction method |
+| | • LangGraph state diagram-driven workflow | • Linear execution flow + simple branching |
+| | • System-wide operation capabilities | • Browser sandbox scope limitations |
+| **Advantages** | • Cross-system multi-application automation capability | • Low resource consumption and fast execution |
+| | • Visual understanding reduces page structure dependency | • Simple deployment and quick start |
+| | • Strong adaptability to UI changes | • Security provided by browser sandbox |
+| | • Multi-agent collaboration for complex problem solving | • Optimized performance for web-specific interactions |
+| **Disadvantages** | • High computational resource requirements | • Operation scope limited to browser environment |
+| | • Complex setup and steep learning curve | • Heavy dependency on DOM structure stability |
+| | • Security considerations from system permission requirements | • Prone to failure when websites update |
+| | • Execution delays due to visual processing | • High maintenance difficulty in complex scenarios |
+| **Best Application Scenarios** | • Cross-application complex workflows | • Simple webpage form filling |
+| | • Interactions requiring visual understanding | • Lightweight data scraping |
+| | • System-level automation tasks | • Resource-constrained environments |
 
 R6D9-Agent-Node provides a more robust, adaptable solution for complex automation scenarios that span across multiple applications and require visual understanding. While browser-based automation tools are simpler to set up and use for basic web tasks, they often struggle with UI changes and complex workflows that R6D9-Agent-Node handles naturally.
 
