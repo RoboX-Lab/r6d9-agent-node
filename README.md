@@ -65,6 +65,31 @@ We're building R6D9 with an ambitious vision:
 
 Through community collaboration and continuous improvement, R6D9 aims to become a platform that bridges agents and humans to digital worlds (Web2 + Web3).
 
+## Competitive Comparison
+
+### R6D9-Agent-Node vs Browser-Use Automation Solutions
+
+| Feature | R6D9-Agent-Node | Browser-Use Automation |
+|---------|-----------------|------------------------|
+| **Architectural Approaches** | TypeScript-based multi-agent collaborative system | Single agent model, limited to browser environment |
+|  | Vision-driven + system API hybrid automation | DOM structure-dependent interaction method |
+|  | LangGraph state diagram-driven workflow | Linear execution flow + simple branching |
+|  | Strong type system (TypeScript + Zod) | Fragile selector dependencies |
+|  | System-wide operation capabilities | Browser sandbox scope limitations |
+| **Core Differences** | Visual understanding + System API calls | DOM manipulation + JavaScript execution |
+|  | Adapts to UI changes, understands visual feedback | Heavily dependent on page structure stability |
+|  | System-wide multi-application coordination | Limited to operations within the browser |
+|  | Complex architecture, steep learning curve | Simple to start, difficult to maintain in complex scenarios |
+| **Advantages** | Universal Automation: Can operate across the entire system and multiple applications | Low Resource Requirements: Minimal CPU and memory usage |
+|  | Visual Understanding: Interprets UI elements visually, reducing dependency on DOM structure | Easy Deployment: Simple setup with minimal dependencies |
+|  | Adaptability: Naturally adjusts to UI changes and visual feedback | Quick Start: Low barrier to entry for basic automation tasks |
+|  | Robust Architecture: Multi-agent collaboration enables complex problem-solving | Security Isolation: Operates within browser sandbox for better security |
+|  | Error Recovery: Sophisticated error handling and recovery strategies | Speed: Direct DOM access provides faster execution for simple tasks |
+|  | Type Safety: Strong typing reduces runtime errors and improves maintainability | Specialized Web Handling: Optimized for web-specific interactions |
+|  | Complex Workflows: Excels at multi-step, cross-application tasks |  |
+
+R6D9-Agent-Node provides a more robust, adaptable solution for complex automation scenarios that span across multiple applications and require visual understanding. While browser-based automation tools are simpler to set up and use for basic web tasks, they often struggle with UI changes and complex workflows that R6D9-Agent-Node handles naturally.
+
 ## Installation
 
 ```bash
