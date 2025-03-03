@@ -93,31 +93,31 @@ Through community collaboration and continuous improvement, R6D9 aims to become 
   <tr>
     <td>Advantages</td>
     <td>
-      • Cross-system multi-application automation capability<br><br>
-      • Visual understanding reduces page structure dependency<br><br>
-      • Strong adaptability to UI changes<br><br>
-      • Multi-agent collaboration for complex problem solving
+      • <strong>Universal Automation:</strong> Cross-system multi-application capabilities<br><br>
+      • <strong>Visual Intelligence:</strong> Reduces dependency on page structure<br><br>
+      • <strong>Adaptive UI Handling:</strong> Naturally adjusts to interface changes<br><br>
+      • <strong>Collaborative Intelligence:</strong> Multi-agent approach for complex problems
     </td>
     <td>
-      • Low resource consumption and fast execution<br><br>
-      • Simple deployment and quick start<br><br>
-      • Security provided by browser sandbox<br><br>
-      • Optimized performance for web-specific interactions
+      • <strong>Resource Efficiency:</strong> Low CPU and memory usage<br><br>
+      • <strong>Quick Implementation:</strong> Simple deployment with minimal setup<br><br>
+      • <strong>Security:</strong> Protected by browser sandbox environment<br><br>
+      • <strong>Web Performance:</strong> Optimized for browser-specific tasks
     </td>
   </tr>
   <tr>
-    <td>Disadvantages</td>
+    <td>Limitations</td>
     <td>
-      • High computational resource requirements<br><br>
-      • Complex setup and steep learning curve<br><br>
-      • Security considerations from system permission requirements<br><br>
-      • Execution delays due to visual processing
+      • <strong>Resource Intensive:</strong> Higher computational requirements<br><br>
+      • <strong>Implementation Complexity:</strong> Steeper learning and setup curve<br><br>
+      • <strong>Security Overhead:</strong> Requires system-level permissions<br><br>
+      • <strong>Processing Latency:</strong> Visual analysis creates execution delays
     </td>
     <td>
-      • Operation scope limited to browser environment<br><br>
-      • Heavy dependency on DOM structure stability<br><br>
-      • Prone to failure when websites update<br><br>
-      • High maintenance difficulty in complex scenarios
+      • <strong>Scope Restriction:</strong> Limited to browser environment only<br><br>
+      • <strong>Structural Dependency:</strong> Relies heavily on stable DOM elements<br><br>
+      • <strong>Update Vulnerability:</strong> Fails when websites change structure<br><br>
+      • <strong>Complexity Ceiling:</strong> Difficult to maintain for advanced scenarios
     </td>
   </tr>
   <tr>
